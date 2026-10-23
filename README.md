@@ -13,7 +13,7 @@ Site web de Registro Climático com api local.
 |pedro@email.com|senha123|
 
 ## Prints
-<img src='./assets/print1.png' width="600">
-<img src='./assets/print2.png' width="600">
+<img src='./assets/print1.png' width="800">
+<img src='./assets/print2.png' width="800">
 
 ### Vicenzo Vieira Varandas
