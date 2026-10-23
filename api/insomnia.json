@@ -1,0 +1,19 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-10-21T17:40:44.561Z",
+  "__export_source": "backend-aula",
+  "resources": [
+    {
+      "_id": "wrk_backend",
+      "_type": "workspace",
+      "name": "Backend Aula"
+    },
+    {
+      "_id": "fld_api",
+      "_type": "request_group",
+      "parentId": "wrk_backend",
+      "name": "api"
+    }
+  ]
+}

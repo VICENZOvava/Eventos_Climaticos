@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Usuario{
+  id Int @id @default(autoincrement())
+  nome String @db.VarChar(100)
+  email String @db.VarChar(100) @unique
+  senha String @db.VarChar(100)
+  eventos Evento[]
+}
+
+model Evento{
+  id Int @id @default(autoincrement())
+  usuarioId Int
+  cidade String @db.VarChar(50)
+  tipoEvento String @db.VarChar(50)
+  temperaturaMaxima Float?
+  data DateTime @default(now())
+  nivelImpacto String @db.VarChar(100)
+  usuario Usuario  @relation(fields: [usuarioId], references: [id])
+}

@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7f6">
+  <title>Eventos climáticos</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="main.js" defer></script>
+</head>
+<body>
+  <main class="login-view" id="loginView">
+    <section class="login-card" aria-labelledby="loginTitle">
+      <h1 id="loginTitle">Entrar</h1>
+      <p class="login-subtitle">Acesse sua conta com e-mail e senha.</p>
+      <form id="loginForm" novalidate>
+        <label for="email">E-mail</label>
+        <input id="email" name="email" type="email" autocomplete="username" placeholder="voce@exemplo.com" required>
+        <label for="password">Senha</label>
+        <div class="password-field">
+          <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Digite sua senha" required>
+          <button id="togglePassword" type="button" aria-label="Mostrar senha" title="Mostrar senha">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg>
+          </button>
+        </div>
+        <p class="form-message" id="loginMessage" role="alert" hidden></p>
+        <button class="button-primary login-submit" id="loginSubmit" type="submit"><span>Entrar</span></button>
+      </form>
+    </section>
+  </main>
+
+  <main class="app-shell" id="appView" hidden>
+    <header class="topbar">
+      <div class="user-summary">
+        <span class="user-avatar" id="userAvatar">U</span>
+        <span class="user-copy"><small>Logado como</small><strong id="loggedUserName">Usuário</strong></span>
+      </div>
+      <button class="logout-button" id="logoutButton" type="button">Sair</button>
+    </header>
+
+    <div class="content-wrap">
+      <section class="welcome-block">
+        <div>
+          <h1>Eventos climáticos</h1>
+          <p>Consulte e gerencie os registros.</p>
+        </div>
+        <button class="button-primary create-button" id="createEventButton" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+          <span>Novo evento</span>
+        </button>
+      </section>
+
+      <section class="events-panel" aria-labelledby="eventsTitle">
+        <div class="events-heading">
+          <div class="events-title">
+            <h2 id="eventsTitle">Registros</h2>
+            <span class="count-pill" id="eventCountPill">0 registros</span>
+          </div>
+          <div class="event-tools">
+            <label class="search-box" for="eventSearch">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 4.5 4.5"></path></svg>
+              <input id="eventSearch" type="search" placeholder="Buscar..." autocomplete="off">
+            </label>
+            <label class="filter-select">
+              <span class="sr-only">Filtrar por tipo</span>
+              <select id="typeFilter"><option value="">Todos os tipos</option></select>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"></path></svg>
+            </label>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="events-table">
+            <thead><tr><th scope="col">Cidade / data</th><th scope="col">Tipo</th><th scope="col">Temperatura</th><th scope="col">Impacto</th><th scope="col"><span class="sr-only">Ações</span></th></tr></thead>
+            <tbody id="eventRows"></tbody>
+          </table>
+          <div class="table-state" id="tableState">
+            <strong id="tableStateTitle">Carregando eventos...</strong>
+            <p id="tableStateText">Buscando registros.</p>
+            <button class="text-button" id="retryEventsButton" type="button" hidden>Tentar novamente</button>
+          </div>
+        </div>
+        <div class="events-footer"><span id="eventsFooterCount">0 eventos</span></div>
+      </section>
+    </div>
+  </main>
+
+  <dialog class="event-dialog" id="eventDialog" aria-labelledby="dialogTitle">
+    <form class="event-form" id="eventForm">
+      <div class="dialog-heading">
+        <div><h2 id="dialogTitle">Adicionar evento</h2><p>Informe os dados da ocorrência.</p></div>
+        <button class="icon-button dialog-close" id="closeDialogButton" type="button" aria-label="Fechar">×</button>
+      </div>
+      <input id="editingEventId" type="hidden">
+      <div class="form-grid">
+        <div class="form-field"><label for="eventCity">Cidade <span>*</span></label><input id="eventCity" name="cidade" type="text" maxlength="50" placeholder="Ex.: Campinas" required></div>
+        <div class="form-field">
+          <label for="eventType">Tipo de evento <span>*</span></label>
+          <input id="eventType" name="tipoEvento" type="text" list="eventTypeSuggestions" maxlength="50" placeholder="Ex.: Tempestade" required>
+          <datalist id="eventTypeSuggestions"><option value="Tempestade"></option><option value="Enchente"></option><option value="Vendaval"></option><option value="Queimada"></option><option value="Geada"></option><option value="Onda de calor"></option><option value="Seca"></option><option value="Baixa umidade relativa do ar"></option></datalist>
+        </div>
+        <div class="form-field"><label for="eventTemperature">Temperatura máxima <small>(opcional)</small></label><div class="temperature-input"><input id="eventTemperature" name="temperaturaMaxima" type="number" min="-50" max="70" step="0.1" placeholder="Ex.: 34,5"><span>°C</span></div></div>
+        <div class="form-field"><label for="eventDate">Data e horário</label><input id="eventDate" name="data" type="datetime-local"></div>
+        <div class="form-field form-field-full"><label for="eventImpact">Nível de impacto <span>*</span></label><textarea id="eventImpact" name="nivelImpacto" rows="3" maxlength="100" placeholder="Descreva os impactos observados..." required></textarea><small class="field-hint">Até 100 caracteres.</small></div>
+      </div>
+      <p class="form-message dialog-message" id="eventFormMessage" role="alert" hidden></p>
+      <div class="dialog-actions">
+        <button class="button-secondary" id="cancelDialogButton" type="button">Cancelar</button>
+        <button class="button-primary" id="saveEventButton" type="submit"><span>Salvar evento</span></button>
+      </div>
+    </form>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
